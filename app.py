@@ -36,14 +36,63 @@ class DoctorChatBot:
 
     def process_input(self, user_input, phone_number="0312-1758206"):
         """Process user input, validate for claim creation, or handle general queries."""
-        user_info = self.fetch_user_info(phone_number)
-        user_info_context = json.dumps(user_info, indent=2)
+        #user_info = self.fetch_user_info(phone_number)
+        user_info_context = {
+                            "id": 87157,
+                            "cnic": "4240135849851",
+                            "name": "MUHAMMAD ZUBAIR",
+                            "contact_no": "0312-1758206",
+                            "email": "null",
+                            "designation": "Orderbooker",
+                            "date_of_birth": "1992-01-17",
+                            "policies": [
+                                {
+                                    "id": 268140,
+                                    "start_date": "2024-06-01",
+                                    "expiry_date": "2025-05-31",
+                                    "available_limit": 24000,
+                                    "policy_type_id": 1
+                                },
+                                {
+                                    "id": 268141,
+                                    "start_date": "2024-06-01",
+                                    "expiry_date": "2025-05-31",
+                                    "available_limit": 300000,
+                                    "policy_type_id": 2
+                                }
+                            ],
+                            "dependents": [
+                                {
+                                    "id": 221198,
+                                    "name": "SHAZIA WAHID",
+                                    "date_of_birth": "1988-03-24",
+                                    "relationship_master_id": 5
+                                }
+                            ],
+                            "claims": [
+                                {
+                                    "id": 43462490,
+                                    "policy_id": 268140,
+                                    "amount_claimed": 1000,
+                                    "is_opd_claim": 1,
+                                    "status": {
+                                        "id": 43451291,
+                                        "status_master_code": 0,
+                                        "master": {
+                                            "name": "Pending For Checker"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+
 
         # Handle greetings
         greetings = ["hi", "hello", "hey"]
         if any(greeting in user_input.lower() for greeting in greetings):
-            prompt = (f"You are an assistant for employee benefits and claims. Use the following context to respond not necessarily in roman"
-                      f"to the user's greeting:\n\nContext:\n{user_info_context}\n\nUser Greeting:\n{user_input}")
+            prompt = (f"You are an assistant for DoctHers. Use the following context."
+                      f"to the user's greeting:\n\nContext:\n{user_info_context}\n\nUser Greeting:\n{user_input}"
+                      f"Regards should always be from DoctHers bot")
             return self.get_llm_response(prompt)
 
         # Check if the user wants to create a claim
@@ -56,10 +105,12 @@ class DoctorChatBot:
                 return self.collect_claim_info(user_input)
 
         # Handle other queries
-        prompt = (f"You are an assistant for employee benefits and claims. You should only display user-friendly information.You can also give answer in roman urdu if user interact with you in that and please use correct languagae "
-                  f"Respond to the user query based on the provided context.Dont include id and any non user friendly things in your responses  "
-                  f"Don't add any extra information and do not answer to questions out of context. Regards should always be from DoctHers Bot.\n\n"
-                  f"provided context.\n\nContext:\n{user_info_context}\n\nUser Query:\n{user_input}")
+        prompt = (f"write <br> after every line end so that i can use that to break the line use that very frequently so i can parse it to generate asnwere line by line in points answers in points() and i can parse that to break the line.You are an assistant for employee benefits and claims. You should only display user-friendly information. "
+                  f"Respond to the user query based on the provided context.Dont include id and any non user friendly things in your responses.if the user ask for personal information like tell me about myself or something about his policy so tell him using the context i provided but dont just copy paste the context try to express it in human friendly manner and show it in."
+                  f"Your Responses should be always in points and not a paragraph so user can understand it in a nice way.Regards should always be from DoctHers Bot.\n\n"
+                  f"provided context.\n\nContext:\n{user_info_context}\n\nUser Query:\n{user_input}" 
+                  f"lastly dont just tell the whole context use your own knowledge to analyze the user question first such as if user ask about himself try to just give a precise and nice response. and also write <br> in your response where you have to break the line so i can parse that <br> in my code and break the line"
+                  )
         return self.get_llm_response(prompt)
 
     def collect_claim_info(self, user_input):
@@ -104,7 +155,9 @@ def chat():
         return jsonify({"message": "No message received"}), 400
 
     response_message = bot.process_input(user_message)
+    print(response_message)
+   # formatted_response = response_message.replace('/c', '<br>')
     return jsonify({"message": response_message})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="173.208.167.7",debug=True,port=5000)
