@@ -36,16 +36,20 @@ const ChatWidget = () => {
 
         setUserMessage(''); // Clear the input
     };
-
+    var getmessage=function(msg,index){
+    var response=msg.content.split('\n')
+   
+         return  <div key={index} className={`message ${msg.role}`}>
+        {response.map(responseitem=>(
+            <p>{responseitem}</p>
+        ))}
+    </div>;
+}
     return (
         <div className="chat-widget">
             <div className="chat-header">Doctors Chatbot</div>
             <div className="chat-body" ref={chatBodyRef}>
-                {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.role}`}>
-                        {msg.content}
-                    </div>
-                ))}
+                {messages.map(getmessage)}
             </div>
             <div className="chat-footer">
                 <input

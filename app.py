@@ -88,12 +88,7 @@ class DoctorChatBot:
 
 
         # Handle greetings
-        greetings = ["hi", "hello", "hey"]
-        if any(greeting in user_input.lower() for greeting in greetings):
-            prompt = (f"You are an assistant for DoctHers. Use the following context."
-                      f"to the user's greeting:\n\nContext:\n{user_info_context}\n\nUser Greeting:\n{user_input}"
-                      f"Regards should always be from DoctHers bot")
-            return self.get_llm_response(prompt)
+        
 
         # Check if the user wants to create a claim
         if "claim" in user_input.lower() and "make" in user_input.lower():
@@ -105,11 +100,11 @@ class DoctorChatBot:
                 return self.collect_claim_info(user_input)
 
         # Handle other queries
-        prompt = (f"write <br> after every line end so that i can use that to break the line use that very frequently so i can parse it to generate asnwere line by line in points answers in points() and i can parse that to break the line.You are an assistant for employee benefits and claims. You should only display user-friendly information. "
-                  f"Respond to the user query based on the provided context.Dont include id and any non user friendly things in your responses.if the user ask for personal information like tell me about myself or something about his policy so tell him using the context i provided but dont just copy paste the context try to express it in human friendly manner and show it in."
+        prompt = (f"you must respond in raw html with <br> as line breaker,strictly adhere to this rule.You are an assistant for employee benefits and claims. You should only display user-friendly information. "
+                  f"Respond to the user query based on the provided context.Dont include id and any non user friendly things in your responses.if the user ask for personal information like tell me about myself or something about his policy so tell him using the context i provided ."
                   f"Your Responses should be always in points and not a paragraph so user can understand it in a nice way.Regards should always be from DoctHers Bot.\n\n"
                   f"provided context.\n\nContext:\n{user_info_context}\n\nUser Query:\n{user_input}" 
-                  f"lastly dont just tell the whole context use your own knowledge to analyze the user question first such as if user ask about himself try to just give a precise and nice response. and also write <br> in your response where you have to break the line so i can parse that <br> in my code and break the line"
+                  f"lastly dont just tell the whole context use your own knowledge to analyze the user question first such as if user ask about himself try to just give a precise and nice response."
                   )
         return self.get_llm_response(prompt)
 
